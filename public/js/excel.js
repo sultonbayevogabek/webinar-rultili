@@ -1,21 +1,23 @@
 'use strict';
 
-let user = JSON.parse(localStorage.getItem('user'));
+(async _ => {
+  let user = JSON.parse(localStorage.getItem('user'));
 
-if (user && user?.name && user?.phone && user?.time) {
+  if (user && user?.name && user?.phone && user?.time) {
     const formData = new FormData();
+
     formData.append('Ismi', user?.name);
     formData.append('Telefon raqami', user?.phone);
     formData.append(`Ro'yxatdan o'tgan vaqti`, user?.time);
 
-    fetch('https://script.google.com/macros/s/AKfycbwlgWrQ18cXcuK2pcD0AMfNMYXPC46lQUygyjsM8-CUCt4-OwRKdGotef1aaN_hk_RX/exec', {
-        method: 'POST',
-        body: formData
+    let response = await fetch('https://script.google.com/macros/s/AKfycbxXMxDYLQsin0zCbs5Zphpbhn3AnkFlxgLlH4qKLWb3Vq3vC3ZCSlS7CmlSHW_OQztW/exec', {
+      method: 'POST',
+      body: formData
     })
-        .then(res => res.json())
-        .then(() => {
-            localStorage.clear();
-        })
-} else {
-    localStorage.clear();
-}
+    await response.json();
+    localStorage.removeItem('user');
+  } else {
+    localStorage.removeItem('user');
+  }
+})()
+
